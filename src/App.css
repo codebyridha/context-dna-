@@ -192,6 +192,7 @@ button:hover {
   padding: 15px 20px;
   border-radius: 18px;
   margin-bottom: 20px;
+  white-space: pre-line;
 }
 
 .chat-input {
