@@ -1,39 +1,68 @@
+import {
+  loadMemory,
+  saveMemory,
+  addMemory,
+} from "../services/memoryService";
 import { useState, useEffect } from "react";
-import { askAI } from "../services/aiService";
+import { askAI, extractMemory } from "../services/aiService";
+import {
+  loadMessages,
+  saveMessages,
+} from "../services/chatService";
 function Chat() {
     const [message, setMessage] = useState("");
 
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(() => {
+  return loadMessages();
+});
+    
 
 const [memory, setMemory] = useState(() => {
-  const savedMemory = localStorage.getItem("memory");
-
-  return savedMemory ? JSON.parse(savedMemory) : [];
+  return loadMemory();
 });
+
+const [selectedCategory, setSelectedCategory] = useState("Goals");
+const [showMemory, setShowMemory] = useState(false);
+
+const categories = [
+  { name: "Profile", icon: "👤" },
+  { name: "Goals", icon: "🎯" },
+  { name: "Learning", icon: "📚" },
+  { name: "Likes", icon: "❤️" },
+  { name: "Hobbies", icon: "🏸" },
+  { name: "Emotions", icon: "😊" },
+  { name: "Notes", icon: "📝" },
+];
+
 useEffect(() => {
-  localStorage.setItem("memory", JSON.stringify(memory));
+ saveMemory(memory);
 }, [memory]);
+useEffect(() => {
+  saveMessages(messages);
+}, [messages]);
 useEffect(() => {
   const nameMemory = memory.find(item => item.startsWith("👤 Name:"));
 
   if (nameMemory) {
     const name = nameMemory.replace("👤 Name:", "").trim();
 
-    setMessages([
-      {
-        sender: "bot",
-        text: `👋 Welcome back, ${name}! 😊`
-      }
-    ]);
+    if (messages.length === 0) {
+  setMessages([
+    {
+      sender: "bot",
+      text: `👋 Welcome back, ${name}! 😊`
+    }
+  ]);
+}
   } else {
-    setMessages([
-      {
-        sender: "bot",
-        text: "👋 Hello! I'm your Context DNA assistant."
-      }
-    ]);
-  }
-}, []);
+  setMessages([
+    {
+      sender: "bot",
+      text: "👋 Hello! I'm your Context DNA assistant."
+    }
+  ]);
+}
+}, [memory,messages]);
 function getBotReply(userMessage) {
   const text = userMessage.toLowerCase();
 
@@ -125,37 +154,41 @@ if (
 
   const learning = memory.find(item => item.startsWith("📚 Learning:"));
   const goal = memory.find(item => item.startsWith("🎯 Goal:"));
-
-  if (learning && learning.includes("Java")) {
-    return `🧠 Since you're learning Java and I remember your goal, I recommend:
+if (learning && learning.includes("Java")) {
+  return `🧠 Since you're learning Java${
+    goal ? " and working toward " + goal.replace("🎯 Goal: ", "") : ""
+  }, I recommend:
 
 ✅ DSA
 ✅ Spring Boot
 ✅ JDBC
 ✅ Hibernate
 ✅ Build Java Projects`;
-  }
+}
 
-  if (learning && learning.includes("React")) {
-    return `🧠 Since you're learning React, I recommend:
+if (learning && learning.includes("React")) {
+  return `🧠 Since you're learning React, I recommend:
 
 ✅ JavaScript ES6
 ✅ React Hooks
 ✅ Node.js
 ✅ Express.js
 ✅ Build Full Stack Projects`;
-  }
-
-  return `📚 I recommend learning one topic deeply before moving to the next. Keep building projects! 🚀`;
 }
-
+return `📚 I recommend learning one topic deeply before moving to the next. Keep building projects! 🚀`;
+}
   return "That's interesting! Tell me more. 😊";
 }
 
-function sendMessage() {
+
+async function sendMessage() {
   if (message.trim() === "") return;
 
   let botReply = getBotReply(message);
+  const aiMemory = await extractMemory(message);
+
+const useAI =
+  botReply === "That's interesting! Tell me more. 😊";
 
 if (botReply === "__SHOW_MEMORY__") {
   if (memory.length === 0) {
@@ -223,27 +256,39 @@ else if (text.startsWith("my goal is ")) {
 
   newMemory = null;
 }
-  if (newMemory && !memory.includes(newMemory)) {
-  setMemory([
-    ...memory,
-    newMemory,
+  const updatedMemory = addMemory(memory, aiMemory || newMemory);
+
+setMemory(updatedMemory);
+if (useAI) {
+  askAI(memory, message).then((aiReply) => {
+    setMessages([
+      ...messages,
+      {
+        sender: "user",
+        text: message,
+      },
+      {
+        sender: "bot",
+        text: aiReply,
+      },
+    ]);
+  });
+} else {
+  setMessages([
+    ...messages,
+    {
+      sender: "user",
+      text: message,
+    },
+    {
+      sender: "bot",
+      text: botReply,
+    },
   ]);
 }
-
-setMessages([
-  ...messages,
-  {
-    sender: "user",
-    text: message,
-  },
-  {
-    sender: "bot",
-    text: botReply,
-  },
-]);
-
 setMessage("");
 }
+
    return (
     <div className="chat-page">
 
@@ -252,15 +297,97 @@ setMessage("");
 
         <h3>Memory</h3>
 
-        <ul>
-  {memory.length === 0 ? (
-    <li>No memories yet...</li>
-  ) : (
-    memory.map((item, index) => (
-      <li key={index}>{item}</li>
-    ))
-  )}
-</ul>
+<div className="memory-categories">
+  <button
+  className="category-btn"
+  onClick={() => setShowMemory(false)}
+>
+  💬 Chat
+</button>
+
+  {categories.map((category) => (
+    
+<button
+    key={category.name}
+
+    className={
+      selectedCategory === category.name
+        ? "active-category"
+        : "category-btn"
+    }
+
+
+    onClick={() => {
+  setSelectedCategory(category.name);
+  setShowMemory(true);
+}}
+
+>
+
+{category.icon} {category.name}
+
+</button>
+
+))}
+
+</div>
+
+<hr />
+
+<div className="memory-viewer">
+
+  <div className="chat-header">
+    🧠 {selectedCategory}
+  </div>
+
+  <div className="memory-content">
+
+    {memory
+      .filter((item) => {
+
+        if (selectedCategory === "Profile")
+          return item.startsWith("👤");
+
+        if (selectedCategory === "Goals")
+          return item.startsWith("🎯");
+
+        if (selectedCategory === "Learning")
+          return item.startsWith("📚");
+
+        if (selectedCategory === "Likes")
+          return item.startsWith("❤️");
+
+        if (selectedCategory === "Hobbies")
+          return item.startsWith("🏸");
+
+        if (selectedCategory === "Emotions")
+          return item.startsWith("😊");
+
+        if (selectedCategory === "Notes")
+    return item.startsWith("📝");
+
+return false;
+})
+
+.map((item, index) => (
+  <div key={index} className="memory-card">
+  {item
+    .replace("👤 Name: ", "👤 ")
+    .replace("🎯 Goal: ", "🎯 ")
+    .replace("📚 Learning: ", "📚 ")
+    .replace("❤️ Likes: ", "❤️ ")
+    .replace("🏸 Hobby: ", "🏸 ")
+    .replace("😊 Emotion: ", "😊 ")
+    .replace("📝 Note: ", "📝 ")
+  }
+</div>
+
+))
+
+}
+</div>
+</div>
+
       </div>
 
       <div className="chat-container">
