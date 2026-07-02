@@ -2,7 +2,7 @@ import "./App.css";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Chat from "./pages/Chat";
+import Chats from "./pages/Chats";
 
 import { Routes, Route } from "react-router-dom";
 
@@ -11,7 +11,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/chat" element={<Chat />} />
+      <Route path="/chat" element={<Chats />} />
     </Routes>
   );
 }

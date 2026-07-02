@@ -132,18 +132,21 @@ button:hover {
    CHAT PAGE
 =========================== */
 
-.chat-page {
-  display: flex;
-  height: 100vh;
-  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+.chat-page{
+    display:flex;
+    height:100vh;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a);
 }
 
-.sidebar {
-  width: 280px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  padding: 30px;
-  color: white;
+.sidebar{
+  width:250px;
+flex-shrink:0;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(12px);
+  color:white;
+  padding:20px;
+  overflow-y:auto;
+  
 }
 
 .sidebar h2 {
@@ -163,10 +166,11 @@ button:hover {
   font-size: 18px;
 }
 
-.chat-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.chat-container{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    width:100%;
 }
 
 .chat-header {
@@ -304,5 +308,305 @@ transition:.3s;
 .category-btn:hover{
 
 transform:scale(1.03);
+
+}
+.memory-viewer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: white;
+}
+
+.memory-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 15px;
+}
+
+.memory-card {
+  background: rgba(255,255,255,0.1);
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  color: white;
+}
+.memory-viewer{
+
+  background:rgba(255,255,255,.05);
+
+  backdrop-filter:blur(10px);
+
+  padding:20px;
+
+  overflow-y:auto;
+
+  border-left:1px solid rgba(255,255,255,.1);
+
+  border-right:1px solid rgba(255,255,255,.1);
+
+}
+
+
+.full-chat .chat-container{
+    width:100%;
+}
+.main-content{
+    flex:1;
+    display:flex;
+    width:100%;
+}
+
+.chat-container{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.memory-viewer{
+    width:100%;
+    background:rgba(255,255,255,.05);
+    border-radius:18px;
+    padding:20px;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    min-height:180px;
+}
+.memory-panel{
+
+    width:340px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+    padding:15px;
+
+    overflow-y:auto;
+
+    background:rgba(255,255,255,.04);
+
+    border-left:1px solid rgba(255,255,255,.08);
+
+}
+
+.memory-score{
+
+    background:rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:18px;
+
+    color:white;
+
+}
+
+.score-circle{
+
+    text-align:center;
+
+    margin:20px 0;
+
+}
+
+.score-item{
+
+    margin:10px 0;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.score-item progress{
+
+    width:100%;
+
+    height:10px;
+
+}
+
+.recommendation-card{
+
+    background:rgba(255,255,255,.08);
+
+    padding:18px;
+
+    border-radius:18px;
+
+    color:white;
+
+}
+
+.recommendation-card h3{
+
+    margin:15px 0;
+
+}
+.memory-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.08);
+
+    margin-bottom:12px;
+
+    color:white;
+
+}
+
+.memory-actions{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.edit-btn,
+.delete-btn{
+
+    padding:8px 12px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+}
+
+.edit-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.delete-btn{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+/* ===========================
+   DASHBOARD
+=========================== */
+
+/* ===========================
+   DASHBOARD
+=========================== */
+
+.dashboard{
+
+    width:460px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    grid-template-areas:
+        "memory memory"
+        "profile score"
+        "insights score";
+
+    gap:20px;
+
+    padding:18px;
+
+    overflow-y:auto;
+
+    background:rgba(255,255,255,.03);
+
+    border-left:1px solid rgba(255,255,255,.08);
+
+}
+
+.dashboard-memory{
+    grid-area:memory;
+}
+
+.dashboard-profile{
+    grid-area:profile;
+}
+
+.dashboard-score{
+    grid-area:score;
+}
+
+.dashboard-insights{
+    grid-area:insights;
+}
+.insight-card{
+
+    background:rgba(255,255,255,.08);
+
+    padding:20px;
+
+    border-radius:18px;
+
+    color:white;
+
+}
+
+.insight-item{
+
+    margin:12px 0;
+
+    font-size:16px;
+
+}
+.profile-card{
+
+    background:rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:20px;
+
+    color:white;
+
+}
+
+.profile-card h2{
+
+    margin-bottom:20px;
+
+}
+
+.profile-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.profile-row:last-child{
+
+    border-bottom:none;
 
 }
