@@ -6,6 +6,7 @@ import ProfileCard from "./ProfileCard";
 function Dashboard({
   memory,
   selectedCategory,
+  deleteMemory,
 }) {
 
   return (
@@ -15,9 +16,10 @@ function Dashboard({
       <div className="dashboard-memory">
 
         <MemoryViewer
-          memory={memory}
-          selectedCategory={selectedCategory}
-        />
+  memory={memory}
+  selectedCategory={selectedCategory}
+  deleteMemory={deleteMemory}
+/>
 
       </div>
 

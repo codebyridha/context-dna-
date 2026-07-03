@@ -2,6 +2,7 @@ import MemoryCard from "./MemoryCard";
 function MemoryViewer({
   memory,
   selectedCategory,
+  deleteMemory,
 }) {
 
   const filteredMemory = memory.filter((item) => {
@@ -60,7 +61,7 @@ function MemoryViewer({
         .replace("😊 Emotion: ", "😊 ")
         .replace("📝 Note: ", "📝 ")
     }
-    onDelete={() => {}}
+   onDelete={() => deleteMemory(item)}
     onEdit={() => {}}
   />
 

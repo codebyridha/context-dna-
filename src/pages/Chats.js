@@ -67,6 +67,15 @@ function Chats() {
   useEffect(() => {
     saveMessages(messages);
   }, [messages]);
+  function deleteMemory(memoryToDelete) {
+
+  const updatedMemory = memory.filter(
+    (item) => item !== memoryToDelete
+  );
+
+  setMemory(updatedMemory);
+
+}
 
   // ==========================
   // Welcome Message
@@ -424,9 +433,10 @@ return (
       {selectedCategory && (
 
   <Dashboard
-    memory={memory}
-    selectedCategory={selectedCategory}
-  />
+  memory={memory}
+  selectedCategory={selectedCategory}
+  deleteMemory={deleteMemory}
+/>
 
 )}
 
