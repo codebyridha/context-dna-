@@ -3,6 +3,7 @@ function MemoryViewer({
   memory,
   selectedCategory,
   deleteMemory,
+  editMemory,
 }) {
 
   const filteredMemory = memory.filter((item) => {
@@ -50,19 +51,24 @@ function MemoryViewer({
           filteredMemory.map((item, index) => (
 
   <MemoryCard
-    key={index}
-    item={
-      item
-        .replace("👤 Name: ", "👤 ")
-        .replace("🎯 Goal: ", "🎯 ")
-        .replace("📚 Learning: ", "📚 ")
-        .replace("❤️ Likes: ", "❤️ ")
-        .replace("🏸 Hobby: ", "🏸 ")
-        .replace("😊 Emotion: ", "😊 ")
-        .replace("📝 Note: ", "📝 ")
-    }
+  key={index}
+
+  item={
+    item
+      .replace("👤 Name: ", "👤 ")
+      .replace("🎯 Goal: ", "🎯 ")
+      .replace("📚 Learning: ", "📚 ")
+      .replace("❤️ Likes: ", "❤️ ")
+      .replace("🏸 Hobby: ", "🏸 ")
+      .replace("😊 Emotion: ", "😊 ")
+      .replace("📝 Note: ", "📝 ")
+  }
+
+
    onDelete={() => deleteMemory(item)}
-    onEdit={() => {}}
+  onEdit={(newMemory) =>
+  editMemory(item, newMemory)
+}
   />
 
 ))

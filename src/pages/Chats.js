@@ -76,7 +76,17 @@ function Chats() {
   setMemory(updatedMemory);
 
 }
+function editMemory(oldMemory, newMemory) {
 
+  const updatedMemory = memory.map((item) =>
+    item === oldMemory ? newMemory : item
+  );
+
+  setMemory(updatedMemory);
+
+} 
+
+  
   // ==========================
   // Welcome Message
   // ==========================
@@ -436,8 +446,8 @@ return (
   memory={memory}
   selectedCategory={selectedCategory}
   deleteMemory={deleteMemory}
+  editMemory={editMemory}
 />
-
 )}
 
       <ChatWindow

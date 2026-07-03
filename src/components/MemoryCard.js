@@ -1,32 +1,81 @@
+import { useState } from "react";
 function MemoryCard({
   item,
   onDelete,
   onEdit,
 }) {
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState(item);
+
+  function saveEdit() {
+    onEdit(editedText);
+    setIsEditing(false);
+  }
+
   return (
 
     <div className="memory-card">
 
-      <span>{item}</span>
+      {isEditing ? (
 
-      <div className="memory-actions">
+        <>
+          <input
+            className="memory-input"
+            value={editedText}
+            onChange={(e) => setEditedText(e.target.value)}
+          />
 
-        <button
-          className="edit-btn"
-          onClick={onEdit}
-        >
-          ✏️
-        </button>
+          <div className="memory-actions">
 
-        <button
-          className="delete-btn"
-          onClick={onDelete}
-        >
-          🗑️
-        </button>
+            <button
+              className="save-btn"
+              onClick={saveEdit}
+            >
+              💾
+            </button>
 
-      </div>
+            <button
+              className="delete-btn"
+              onClick={() => {
+                setEditedText(item);
+                setIsEditing(false);
+              }}
+            >
+              ❌
+            </button>
+
+          </div>
+
+        </>
+
+      ) : (
+
+        <>
+
+          <span>{item}</span>
+
+          <div className="memory-actions">
+
+            <button
+              className="edit-btn"
+              onClick={() => setIsEditing(true)}
+            >
+              ✏️
+            </button>
+
+            <button
+              className="delete-btn"
+              onClick={onDelete}
+            >
+              🗑️
+            </button>
+
+          </div>
+
+        </>
+
+      )}
 
     </div>
 

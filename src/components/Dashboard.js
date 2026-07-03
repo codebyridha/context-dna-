@@ -7,6 +7,7 @@ function Dashboard({
   memory,
   selectedCategory,
   deleteMemory,
+  editMemory,
 }) {
 
   return (
@@ -14,12 +15,14 @@ function Dashboard({
     <div className="dashboard">
 
       <div className="dashboard-memory">
-
-        <MemoryViewer
+        
+<MemoryViewer
   memory={memory}
   selectedCategory={selectedCategory}
   deleteMemory={deleteMemory}
+  editMemory={editMemory}
 />
+        
 
       </div>
 
