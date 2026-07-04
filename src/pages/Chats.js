@@ -134,9 +134,16 @@ function editMemory(oldMemory, newMemory) {
     const text = userMessage.toLowerCase();
 
     // Greetings
-    if (text.includes("hi") || text.includes("hello")) {
-      return "Hello! 👋 How can I help you today?";
-    }
+    if (
+  text === "hi" ||
+  text.startsWith("hi ") ||
+  text === "hello" ||
+  text.startsWith("hello ") ||
+  text === "hey" ||
+  text.startsWith("hey ")
+) {
+  return "Hello! 👋 How can I help you today?";
+}
 
     if (text.includes("who are you")) {
       return "I'm Context DNA 🧬, an AI that remembers your goals, preferences and habits.";
@@ -194,7 +201,69 @@ if (text.startsWith("i am ")) {
   const value = userMessage.substring(5).trim();
 
   if (emotions.includes(value.toLowerCase())) {
-    return `I'm sorry you're feeling ${value}. 💙 I'm here if you want to talk.`;
+    const like = memory.find(item =>
+  item.startsWith("❤️ Likes:")
+);
+
+const hobby = memory.find(item =>
+  item.startsWith("🏸 Hobby:")
+);
+
+const emotion = value.toLowerCase();
+
+// 😊 HAPPY
+if (emotion === "happy" || emotion === "excited") {
+
+  if (like || hobby) {
+
+    return `I'm so happy you're feeling ${emotion}! 😄 Since you enjoy ${like ? like.replace("❤️ Likes: ", "") : hobby.replace("🏸 Hobby: ", "")}, maybe celebrate by spending some time doing what you love! 🌸`;
+
+  }
+
+  return `I'm so happy you're feeling ${emotion}! 😄 Keep smiling and enjoy the moment! 🌸`;
+
+}
+
+// 😔 SAD / STRESSED
+if (
+  emotion === "sad" ||
+  emotion === "stressed" ||
+  emotion === "worried" ||
+  emotion === "upset"
+) {
+
+  if (like || hobby) {
+
+    return `I'm really sorry you're feeling ${emotion}. 💙 I remember you enjoy ${like ? like.replace("❤️ Likes: ", "") : hobby.replace("🏸 Hobby: ", "")}. Maybe spending a little time doing something you love could help you feel a bit better. 🌸`;
+
+  }
+
+  return `I'm really sorry you're feeling ${emotion}. 💙 I'm here for you. If you'd like to talk about what's bothering you, I'll listen and help however I can. 🌸`;
+
+}
+
+// 😴 TIRED
+if (
+  emotion === "tired" ||
+  emotion === "sleepy"
+) {
+
+  return `You've been working hard. 😴 Take a little rest and recharge. Remember to take care of yourself too. 💙`;
+
+}
+
+// Default
+const userName = memory.find(item =>
+  item.startsWith("👤 Name:")
+);
+
+const name = userName
+  ? userName.replace("👤 Name: ", "")
+  : "there";
+
+return userName
+  ? `I'm here for you, ${name}. 💙`
+  : "I'm here for you. 💙";
   }
 
   return `Nice to meet you, ${value}! 😊`;
@@ -233,6 +302,52 @@ if (text.startsWith("i'm ")) {
       const goal = userMessage.substring(11).trim();
       return `🎯 Awesome! I'll remember your goal: ${goal}`;
     }
+    if (
+  text.includes("which college") ||
+  text.includes("what college")
+) {
+
+  const college = memory.find(item =>
+    item.startsWith("👤 College:")
+  );
+
+  if (college) {
+    return `🎓 You are studying at ${college.replace("👤 College: ", "")}.`;
+  }
+
+  return "I don't know your college yet.";
+}
+if (
+  text.includes("which school") ||
+  text.includes("what school")
+) {
+
+  const school = memory.find(item =>
+    item.startsWith("👤 School:")
+  );
+
+  if (school) {
+    return `🏫 You studied at ${school.replace("👤 School: ", "")}.`;
+  }
+
+  return "I don't know your school yet.";
+}
+if (
+  text.includes("my course") ||
+  text.includes("which course")
+) {
+
+  const course = memory.find(item =>
+    item.startsWith("👤 Course:")
+  );
+
+  if (course) {
+    return `📚 Your course is ${course.replace("👤 Course: ", "")}.`;
+  }
+
+  return "I don't know your course yet.";
+}
+
 
     // ==========================
     // Memory Summary
@@ -393,15 +508,79 @@ else if (
   else if (text.startsWith("my goal is ")) {
     newMemory = `🎯 Goal: ${message.substring(11).trim()}`;
   }
+  else if (
+  text.startsWith("i study at ") ||
+  text.startsWith("i am studying at ")
+) {
+
+  const college = text.startsWith("i study at ")
+    ? message.substring(11).trim()
+    : message.substring(17).trim();
+
+  newMemory = `👤 College: ${college}`;
+
+}
+else if (
+  text.startsWith("my course is ")
+) {
+
+  newMemory = `👤 Course: ${message.substring(13).trim()}`;
+
+}
+else if (
+  text.startsWith("i studied at ") ||
+  text.startsWith("i studied in ")
+) {
+
+  const school = text.startsWith("i studied at ")
+    ? message.substring(13).trim()
+    : message.substring(13).trim();
+
+  newMemory = `👤 School: ${school}`;
+
+}
+else if (
+  text.startsWith("i live in ")
+) {
+
+  newMemory = `👤 City: ${message.substring(10).trim()}`;
+
+}
+else if (
+  text.startsWith("i am ") &&
+  text.includes("years old")
+) {
+
+  const age = text
+    .replace("i am", "")
+    .replace("years old", "")
+    .trim();
+
+  newMemory = `👤 Age: ${age}`;
+
+}
+else if (
+  text.startsWith("my birthday is ")
+) {
+
+  newMemory = `👤 DOB: ${message.substring(15).trim()}`;
+
+}
+
+console.log("Manual Memory:", newMemory);
+console.log("AI Memory:", aiMemory);
+console.log("Message:", message);
 
   if (aiMemory || newMemory) {
 
-    const updatedMemory =
-      addMemory(memory, aiMemory || newMemory);
+  const memoryToSave = newMemory || aiMemory;
 
-    setMemory(updatedMemory);
+  const updatedMemory =
+    addMemory(memory, memoryToSave);
 
-  }
+  setMemory(updatedMemory);
+
+}
 
   const finalReply = botReply === "That's interesting! Tell me more. 😊"
     ? await askAI(memory, message)
