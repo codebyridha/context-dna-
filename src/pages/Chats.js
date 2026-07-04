@@ -12,10 +12,7 @@ import {
 } from "../services/chatService";
 
 import Sidebar from "../components/Sidebar";
-import MemoryViewer from "../components/MemoryViewer";
 import ChatWindow from "../components/ChatWindow";
-import MemoryScore from "../components/MemoryScore";
-import RecommendationCard from "../components/RecommendationCard_old.js";
 import Dashboard from "../components/Dashboard";
 import {
   askAI,
@@ -124,7 +121,7 @@ function editMemory(oldMemory, newMemory) {
 
     }
 
-  }, []);
+  }, [messages, memory]);
     // ==========================
   // Bot Reply Logic
   // ==========================
