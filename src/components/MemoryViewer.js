@@ -52,19 +52,7 @@ function MemoryViewer({
 
   <MemoryCard
   key={index}
-
-  item={
-    item
-      .replace("👤 Name: ", "👤 ")
-      .replace("🎯 Goal: ", "🎯 ")
-      .replace("📚 Learning: ", "📚 ")
-      .replace("❤️ Likes: ", "❤️ ")
-      .replace("🏸 Hobby: ", "🏸 ")
-      .replace("😊 Emotion: ", "😊 ")
-      .replace("📝 Note: ", "📝 ")
-  }
-
-
+  item={item}
    onDelete={() => deleteMemory(item)}
   onEdit={(newMemory) =>
   editMemory(item, newMemory)
